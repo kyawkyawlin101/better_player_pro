@@ -721,15 +721,14 @@ internal class BetterPlayer(
                 val group = trackGroups.get(groupIndex)
                 val safeTrackIndex = trackIndex.coerceIn(0, group.length - 1)
 
-                val builder = trackSelector.parameters
-                    .buildUpon()
-                    .setRendererDisabled(rendererIndex, false)
-                    .addOverride(
-                        TrackSelectionOverride(
-                            group,
-                            safeTrackIndex
-                        )
-                    )
+		val builder = trackSelector.parameters
+    			.buildUpon()
+    			.setTrackTypeDisabled(C.TRACK_TYPE_AUDIO, false)
+    			.clearOverridesOfType(C.TRACK_TYPE_AUDIO)
+    			.addOverride(
+        			TrackSelectionOverride(group, safeTrackIndex)
+    			)
+
 
                 trackSelector.setParameters(builder)
             } else {
