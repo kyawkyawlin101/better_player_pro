@@ -339,6 +339,21 @@ extension SwiftBetterPlayerPlugin {
                 }
             }
             result(nil)
+        case "setAspectRatio":
+            guard let aspectRatioValue = argsMap["ratio"] as? String else {
+                result(nil)
+                return
+            }
+            let aspectRatio: AVLayerVideoGravity = switch(aspectRatioValue) {
+            case "aspect":
+                    .resizeAspect
+            case "fill":
+                    .resizeAspectFill
+            default: .resizeAspect
+                
+            }
+            player.setAspectRatio(aspectRatio)
+            result(nil)
         default:
             result(FlutterMethodNotImplemented)
         }

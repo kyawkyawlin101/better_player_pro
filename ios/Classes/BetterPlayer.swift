@@ -23,6 +23,8 @@ public class BetterPlayer: NSObject, FlutterPlatformView, FlutterStreamHandler, 
     public private(set) var isInitialized: Bool = false
     public private(set) var key: String? = nil
     public private(set) var failedCount: Int = 0
+    private var videoGravity: AVLayerVideoGravity = .resizeAspect
+    private weak var playerView: UIView?
 
     public var playerLayerRef: AVPlayerLayer?
     public var pictureInPicture: Bool = false
@@ -56,7 +58,25 @@ public class BetterPlayer: NSObject, FlutterPlatformView, FlutterStreamHandler, 
     public func view() -> UIView {
         let playerView = BetterPlayerView(frame: .zero)
         playerView.player = player
+        if let playerLayer = playerView.layer as? AVPlayerLayer {
+            playerLayer.videoGravity = self.videoGravity
+        }
+        
+        self.playerView = playerView
         return playerView
+    }
+    
+    // MARK: - Aspect Ratio Handling
+    public func setAspectRatio(_ gravity: AVLayerVideoGravity) {
+        self.videoGravity = gravity
+        
+        if let playerLayer = playerView?.layer as? AVPlayerLayer {
+            playerLayer.videoGravity = gravity
+        }
+        
+        if let pipLayer = playerLayerRef {
+            pipLayer.videoGravity = gravity
+        }
     }
 
     // MARK: - Observers
@@ -482,6 +502,7 @@ public class BetterPlayer: NSObject, FlutterPlatformView, FlutterStreamHandler, 
 
     private func usePlayerLayer(_ frame: CGRect) {
         let layer = AVPlayerLayer(player: player)
+        layer.videoGravity = self.videoGravity
         if #available(iOS 13.0, *) {
             if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
                let window = windowScene.windows.first,

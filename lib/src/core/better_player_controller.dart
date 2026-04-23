@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:better_player_plus/better_player_plus.dart';
 import 'package:better_player_plus/src/configuration/better_player_controller_event.dart';
 import 'package:better_player_plus/src/core/better_player_utils.dart';
+import 'package:better_player_plus/src/enum/aspect_enum.dart';
 import 'package:better_player_plus/src/subtitles/better_player_subtitle.dart';
 import 'package:better_player_plus/src/subtitles/better_player_subtitles_factory.dart';
 import 'package:better_player_plus/src/video_player/video_player.dart';
@@ -501,6 +502,7 @@ class BetterPlayerController {
   ///run on player start.
   Future<void> _initializeVideo() async {
     unawaited(setLooping(betterPlayerConfiguration.looping));
+    unawaited(updateAspectRatioIOS(betterPlayerConfiguration.aspectRatioIOS ?? AspectRatioTypeIOS.fill));
     if (_videoEventStreamSubscription != null) {
       unawaited(_videoEventStreamSubscription!.cancel());
       _videoEventStreamSubscription = null;
@@ -991,6 +993,14 @@ class BetterPlayerController {
   ///BetterPlayerConfiguration will be used. Otherwise [_overriddenFit] will be
   ///used.
   BoxFit getFit() => _overriddenFit ?? betterPlayerConfiguration.fit;
+
+  Future<void>? updateAspectRatioIOS(AspectRatioTypeIOS aspectRatio) {
+    if (videoPlayerController == null) {
+      throw StateError('The data source has not been initialized');
+    }
+    return videoPlayerController!.setAspectRatio(aspectRatio.name);
+
+  }
 
   ///Enable Picture in Picture (PiP) mode. [betterPlayerGlobalKey] is required
   ///to open PiP mode in iOS. When device is not supported, PiP mode won't be

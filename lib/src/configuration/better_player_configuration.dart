@@ -1,4 +1,5 @@
 import 'package:better_player_plus/better_player_plus.dart';
+import 'package:better_player_plus/src/enum/aspect_enum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -8,6 +9,7 @@ import 'package:flutter/services.dart';
 class BetterPlayerConfiguration {
   const BetterPlayerConfiguration({
     this.aspectRatio,
+    this.aspectRatioIOS = AspectRatioTypeIOS.fill,
     this.autoPlay = false,
     this.startAt,
     this.looping = false,
@@ -61,6 +63,8 @@ class BetterPlayerConfiguration {
   ///
   /// Will fallback to fitting within the space allowed.
   final double? aspectRatio;
+
+  final AspectRatioTypeIOS? aspectRatioIOS;
 
   /// The placeholder is displayed underneath the Video before it is initialized
   /// or played.
@@ -156,6 +160,7 @@ class BetterPlayerConfiguration {
 
   BetterPlayerConfiguration copyWith({
     double? aspectRatio,
+    AspectRatioTypeIOS? aspectRatioIOS,
     bool? autoPlay,
     Duration? startAt,
     bool? looping,
@@ -214,5 +219,6 @@ class BetterPlayerConfiguration {
     autoDispose: autoDispose ?? this.autoDispose,
     expandToFill: expandToFill ?? this.expandToFill,
     useRootNavigator: useRootNavigator ?? this.useRootNavigator,
+    aspectRatioIOS: aspectRatioIOS ?? this.aspectRatioIOS,
   );
 }

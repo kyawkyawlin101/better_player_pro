@@ -33,6 +33,7 @@ class VideoPlayerValue {
     this.speed = 1.0,
     this.errorDescription,
     this.isPip = false,
+    this.aspectRatioIOS = '',
   });
 
   /// Returns an instance with a `null` [Duration].
@@ -86,6 +87,9 @@ class VideoPlayerValue {
   ///Is in Picture in Picture Mode
   final bool isPip;
 
+  //Aspect Ratio of the video for iOS
+  final String aspectRatioIOS;
+
   /// Indicates whether or not the video has been loaded and is ready to play.
   bool get initialized => duration != null;
 
@@ -121,6 +125,7 @@ class VideoPlayerValue {
     String? errorDescription,
     double? speed,
     bool? isPip,
+    String? aspectRatioIOS,
   }) => VideoPlayerValue(
     duration: duration ?? this.duration,
     size: size ?? this.size,
@@ -134,6 +139,7 @@ class VideoPlayerValue {
     speed: speed ?? this.speed,
     errorDescription: errorDescription ?? this.errorDescription,
     isPip: isPip ?? this.isPip,
+    aspectRatioIOS: aspectRatioIOS ?? this.aspectRatioIOS,
   );
 
   @override
@@ -148,6 +154,7 @@ class VideoPlayerValue {
       'isLooping: $isLooping, '
       'isBuffering: $isBuffering, '
       'volume: $volume, '
+      'aspectRatioIOS: $aspectRatioIOS, '
       'errorDescription: $errorDescription)';
 }
 
@@ -419,11 +426,24 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
     await _applyPlayPause();
   }
 
+  /// Set aspect ratio for iOS for the video.
+  Future<void> setAspectRatio(String aspectRatio) async {
+    value = value.copyWith(aspectRatioIOS: aspectRatio);
+    await _applyAspectRatio();
+  }
+
   Future<void> _applyLooping() async {
     if (!_created || _isDisposed) {
       return;
     }
     await _videoPlayerPlatform.setLooping(_textureId, value.isLooping);
+  }
+
+  Future<void> _applyAspectRatio() async {
+    if (!_created || _isDisposed) {
+      return;
+    }
+    await _videoPlayerPlatform.setAspectRatio(_textureId, value.aspectRatioIOS);
   }
 
   Future<void> _applyPlayPause() async {

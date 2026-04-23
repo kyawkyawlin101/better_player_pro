@@ -115,6 +115,10 @@ abstract class VideoPlayerPlatform {
     throw UnimplementedError('setSpeed() has not been implemented.');
   }
 
+  Future<void> setAspectRatio(int? textureId, String aspectRatio) {
+    throw UnimplementedError('setAspectRatio() has not been implemented.');
+  }
+
   /// Sets the video track parameters (used to select quality of the video)
   Future<void> setTrackParameters(int? textureId, int? width, int? height, int? bitrate) {
     throw UnimplementedError('setTrackParameters() has not been implemented.');
