@@ -1,6 +1,7 @@
 ## 1.2.0
 
 * Dart SDK updated → 3.11.0, Flutter SDK updated → 3.41.0
+* Android Media3 updated → 1.10.0
 * Fixed controlsVisibilityStream feedback loop by guarding against duplicate state updates
 * Fixed controlsVisibilityStream not emitting when UI auto-hides
 * Fixed aspect ratio issues for iOS AVPlayer

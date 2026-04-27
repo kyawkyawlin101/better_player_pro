@@ -111,7 +111,7 @@ Apache 2.0 — see [`LICENSE`](LICENSE).
 
 ### Recent Updates (v1.2.0)
 
-- **SDK Update**: Dart SDK `>=3.11.0`, Flutter SDK `>=3.41.0`
+- **SDK Update**: Dart SDK `>=3.11.0`, Flutter SDK `>=3.41.0`, Android Media3 `1.10.0`
 - **iOS Fixes**: Preserved playback speed across seek/pause/resume; fixed AVPlayer aspect ratio issues; added wakelock (disable auto-sleep) support
 - **Audio**: Fixed audio track override not being cleared before applying a new one; improved HLS default audio source selection
 - **Controls**: Fixed `controlsVisibilityStream` feedback loop and auto-hide emit behaviour
