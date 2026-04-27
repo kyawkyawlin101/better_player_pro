@@ -492,6 +492,9 @@ class _BetterPlayerMaterialControlsState extends BetterPlayerControlsState<Bette
     }
 
     _controlsVisibilityStreamSubscription = _betterPlayerController!.controlsVisibilityStream.listen((state) {
+      if (controlsNotVisible == !state) {
+        return;
+      }
       changePlayerControlsNotVisible(!state);
       if (!controlsNotVisible) {
         cancelAndRestartTimer();
@@ -579,6 +582,7 @@ class _BetterPlayerMaterialControlsState extends BetterPlayerControlsState<Bette
 
   void _onPlayerHide() {
     _betterPlayerController!.toggleControlsVisibility(!controlsNotVisible);
+    _betterPlayerController!.setControlsVisibility(!controlsNotVisible);
     widget.onControlsVisibilityChanged(!controlsNotVisible);
   }
 

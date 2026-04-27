@@ -467,6 +467,9 @@ class _BetterPlayerCupertinoControlsState extends BetterPlayerControlsState<Bett
       });
     }
     _controlsVisibilityStreamSubscription = _betterPlayerController!.controlsVisibilityStream.listen((state) {
+      if (controlsNotVisible == !state) {
+        return;
+      }
       changePlayerControlsNotVisible(!state);
 
       if (!controlsNotVisible) {
@@ -557,6 +560,7 @@ class _BetterPlayerCupertinoControlsState extends BetterPlayerControlsState<Bett
 
   void _onPlayerHide() {
     _betterPlayerController!.toggleControlsVisibility(!controlsNotVisible);
+    _betterPlayerController!.setControlsVisibility(!controlsNotVisible);
     widget.onControlsVisibilityChanged(!controlsNotVisible);
   }
 
