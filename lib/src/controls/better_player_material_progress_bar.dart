@@ -1,3 +1,4 @@
+// GestureDetector callbacks require separate statements rather than cascade chains
 // ignore_for_file: cascade_invocations
 
 import 'dart:async';

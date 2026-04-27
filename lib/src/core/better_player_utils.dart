@@ -59,6 +59,7 @@ final class BetterPlayerUtils {
 
   static void log(String logMessage) {
     if (!kReleaseMode) {
+      // dart:developer log is not always captured in release; print is intentional here
       // ignore: avoid_print
       print(logMessage);
     }

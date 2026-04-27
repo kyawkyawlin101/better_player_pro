@@ -29,14 +29,4 @@ class BetterPlayerAsmsAudioTrack {
   final String? mimeType;
 
   final bool? isDefault;
-
-  BetterPlayerAsmsAudioTrack({
-    this.id,
-    this.segmentAlignment,
-    this.label,
-    this.language,
-    this.url,
-    this.mimeType,
-    this.isDefault,
-  });
 }

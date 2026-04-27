@@ -23,6 +23,7 @@ class BetterPlayerSubtitlesDrawer extends StatefulWidget {
 
 class _BetterPlayerSubtitlesDrawerState extends State<BetterPlayerSubtitlesDrawer> {
   final RegExp htmlRegExp =
+      // Raw string kept for clarity even though no special sequences are present
       // ignore: unnecessary_raw_strings
       RegExp(r'<[^>]*>', multiLine: true);
   late TextStyle _innerTextStyle;

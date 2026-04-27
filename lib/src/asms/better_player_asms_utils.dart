@@ -24,7 +24,7 @@ class BetterPlayerAsmsUtils {
   static bool isDataSourceDash(String url) => url.contains(_dashExtension);
 
   ///Parse playlist based on type of stream.
-  static Future<BetterPlayerAsmsDataHolder> parse(String data, String masterPlaylistUrl) async =>
+  static Future<BetterPlayerAsmsDataHolder> parse(String data, String masterPlaylistUrl) =>
       BetterPlayerHlsUtils.parse(data, masterPlaylistUrl);
 
   ///Request data from given uri along with headers. May return null if resource

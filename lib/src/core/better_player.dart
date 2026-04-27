@@ -1,3 +1,4 @@
+// Navigator push returns a future that is intentionally not awaited in callbacks
 // ignore_for_file: discarded_futures
 
 import 'dart:async';
@@ -126,7 +127,6 @@ class _BetterPlayerState extends State<BetterPlayer> with WidgetsBindingObserver
     }
   }
 
-  // ignore: avoid_void_async
   Future<void> onFullScreenChanged() async {
     final controller = widget.controller;
     if (controller.isFullScreen && !_isFullScreen) {

@@ -20,6 +20,7 @@ class BetterPlayerListVideoPlayerController {
     _betterPlayerController?.seekTo(duration);
   }
 
+  // Kept as a method (not a setter) to maintain a consistent API with the rest of the controller
   // ignore: use_setters_to_change_properties
   void setBetterPlayerController(BetterPlayerController? betterPlayerController) {
     _betterPlayerController = betterPlayerController;

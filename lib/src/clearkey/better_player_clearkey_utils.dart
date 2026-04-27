@@ -1,3 +1,4 @@
+// JsonEncode keyMap uses dynamic for nested list/map mutations
 // ignore_for_file: avoid_dynamic_calls
 
 import 'dart:convert';

@@ -110,6 +110,7 @@ sealed class BetterPlayerHlsUtils {
         final split = rendition.url.toString().split('/');
         var realUrl = '';
         for (var index = 0; index < split.length - 1; index++) {
+          // Loop count is always small (URL path segments); StringBuffer overhead not justified
           // ignore: use_string_buffers
           realUrl += '${split[index]}/';
         }

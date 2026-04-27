@@ -814,7 +814,7 @@ class BetterPlayerController {
         return;
       }
 
-      _nextVideoTimer = Timer.periodic(const Duration(milliseconds: 1000), (timer) async {
+      _nextVideoTimer = Timer.periodic(const Duration(milliseconds: 1000), (timer) {
         if (_nextVideoTime == 1) {
           timer.cancel();
           _nextVideoTimer = null;
@@ -982,7 +982,6 @@ class BetterPlayerController {
   ///[_overriddenAspectRatio] will be used.
   double? getAspectRatio() => _overriddenAspectRatio ?? betterPlayerConfiguration.aspectRatio;
 
-  // ignore: use_setters_to_change_properties
   ///Setup overridden fit.
   void setOverriddenFit(BoxFit fit) {
     _overriddenFit = fit;
@@ -1059,7 +1058,6 @@ class BetterPlayerController {
     return videoPlayerController!.disablePictureInPicture();
   }
 
-  // ignore: use_setters_to_change_properties
   ///Set GlobalKey of BetterPlayer. Used in PiP methods called from controls.
   void setBetterPlayerGlobalKey(GlobalKey betterPlayerGlobalKey) {
     _betterPlayerGlobalKey = betterPlayerGlobalKey;
@@ -1155,7 +1153,7 @@ class BetterPlayerController {
 
   ///Clear all cached data. Video player controller must be initialized to
   ///clear the cache.
-  Future<void> clearCache() async => VideoPlayerController.clearCache();
+  Future<void> clearCache() => VideoPlayerController.clearCache();
 
   ///Build headers map that will be used to setup video player controller. Apply
   ///DRM headers if available.
@@ -1175,7 +1173,7 @@ class BetterPlayerController {
   ///On iOS, the whole file will be downloaded, since [maxCacheFileSize] is
   ///currently not supported on iOS. On iOS, the video format must be in this
   ///list: https://github.com/sendyhalim/Swime/blob/master/Sources/MimeType.swift
-  Future<void> preCache(BetterPlayerDataSource betterPlayerDataSource) async {
+  Future<void> preCache(BetterPlayerDataSource betterPlayerDataSource) {
     final cacheConfig =
         betterPlayerDataSource.cacheConfiguration ?? const BetterPlayerCacheConfiguration(useCache: true);
 
@@ -1195,7 +1193,7 @@ class BetterPlayerController {
 
   ///Stop pre cache for given [betterPlayerDataSource]. If there was no pre
   ///cache started for given [betterPlayerDataSource] then it will be ignored.
-  Future<void> stopPreCache(BetterPlayerDataSource betterPlayerDataSource) async =>
+  Future<void> stopPreCache(BetterPlayerDataSource betterPlayerDataSource) =>
       VideoPlayerController.stopPreCache(betterPlayerDataSource.url, betterPlayerDataSource.cacheConfiguration?.key);
 
   /// Sets the new [betterPlayerControlsConfiguration] instance in the

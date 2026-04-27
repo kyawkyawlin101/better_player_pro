@@ -60,6 +60,7 @@ abstract class BetterPlayerControlsState<T extends StatefulWidget> extends State
   Widget _buildMoreOptionsList() {
     final translations = betterPlayerController!.translations;
     return SingleChildScrollView(
+      // Container provides padding/decoration for the options list
       // ignore: avoid_unnecessary_containers
       child: Container(
         child: Column(

@@ -1,3 +1,4 @@
+// Platform channel method signatures require dynamic parameter types
 // ignore_for_file: avoid_annotating_with_dynamic
 
 import 'dart:async';
@@ -156,7 +157,7 @@ class MethodChannelVideoPlayer extends VideoPlayerPlatform {
   }
 
   @override
-  Future<void> enablePictureInPicture(int? textureId, double? top, double? left, double? width, double? height) async =>
+  Future<void> enablePictureInPicture(int? textureId, double? top, double? left, double? width, double? height) =>
       _channel.invokeMethod<void>('enablePictureInPicture', <String, dynamic>{
         'textureId': textureId,
         'top': top,

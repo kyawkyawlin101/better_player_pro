@@ -1,3 +1,4 @@
+// GestureDetector callbacks are void and return futures that are intentionally not awaited
 // ignore_for_file: cascade_invocations, discarded_futures
 
 import 'dart:async';
