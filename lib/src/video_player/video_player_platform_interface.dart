@@ -39,7 +39,6 @@ abstract class VideoPlayerPlatform {
   /// Defaults to [MethodChannelVideoPlayer].
   static VideoPlayerPlatform get instance => _instance;
 
-  // TODO(amirh): Extract common platform interface logic.
   // https://github.com/flutter/flutter/issues/43368
   static set instance(VideoPlayerPlatform instance) {
     if (!instance.isMock) {

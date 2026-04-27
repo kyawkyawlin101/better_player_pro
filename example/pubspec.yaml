@@ -4,8 +4,8 @@ publish_to: "none"
 description: "Better Player example usage app."
 
 environment:
-  sdk: ">=3.9.0 <4.0.0"
-  flutter: ">=3.35.0"
+  sdk: ">=3.11.0 <4.0.0"
+  flutter: ">=3.41.0"
 
 dependencies:
   better_player_plus:
