@@ -443,7 +443,9 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
     if (!_created || _isDisposed) {
       return;
     }
-    await _videoPlayerPlatform.setAspectRatio(_textureId, value.aspectRatioIOS);
+    if (Platform.isIOS) {
+      await _videoPlayerPlatform.setAspectRatio(_textureId, value.aspectRatioIOS);
+    }
   }
 
   Future<void> _applyPlayPause() async {
@@ -613,8 +615,7 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
   static Future<void> preCache(DataSource dataSource, int preCacheSize) =>
       _videoPlayerPlatform.preCache(dataSource, preCacheSize);
 
-  static Future<void> stopPreCache(String url, String? cacheKey) =>
-      _videoPlayerPlatform.stopPreCache(url, cacheKey);
+  static Future<void> stopPreCache(String url, String? cacheKey) => _videoPlayerPlatform.stopPreCache(url, cacheKey);
 }
 
 /// Widget that displays the video controlled by [controller].
