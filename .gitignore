@@ -6,6 +6,10 @@
 .DS_Store
 .atom/
 .buildlog/
+
+# Swift Package Manager
+.build/
+.swiftpm/
 .history
 .svn/
 

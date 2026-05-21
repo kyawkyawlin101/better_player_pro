@@ -1,3 +1,9 @@
+## 1.3.0
+
+* iOS Swift Package Manager (SPM) support added
+* Migrated iOS source files from `Classes/` to SPM-compatible structure (`better_player_plus/Sources/better_player_plus/`)
+* Added `Package.swift` for SPM integration alongside existing CocoaPods support
+
 ## 1.2.1
 
 * Fixed MissingPluginException for `setAspectRatio` on Android by guarding the call with `Platform.isIOS`
