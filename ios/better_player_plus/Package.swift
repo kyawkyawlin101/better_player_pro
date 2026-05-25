@@ -11,7 +11,9 @@ let package = Package(
     products: [
         .library(name: "better-player-plus", targets: ["better_player_plus"])
     ],
-    dependencies: [],
+    dependencies: [
+        .package(name: "FlutterFramework", path: "../FlutterFramework"),
+    ],
     targets: [
         .target(
             name: "GCDWebServer"
@@ -29,6 +31,7 @@ let package = Package(
         .target(
             name: "better_player_plus",
             dependencies: [
+                .product(name: "FlutterFramework", package: "FlutterFramework"),
                 .target(name: "GCDWebServer"),
                 .target(name: "PINCache"),
                 .target(name: "HLSCachingReverseProxyServer"),

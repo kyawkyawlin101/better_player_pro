@@ -275,17 +275,14 @@ class _BetterPlayerVideoFitWidgetState extends State<_BetterPlayerVideoFitWidget
     switch (boxFit) {
       case BoxFit.fill:
         gravity = 'stretch';
-        break;
       case BoxFit.cover:
         gravity = 'fill';
-        break;
       case BoxFit.contain:
       case BoxFit.fitWidth:
       case BoxFit.fitHeight:
       case BoxFit.scaleDown:
       case BoxFit.none:
         gravity = 'aspect';
-        break;
     }
     if (_lastAppliedGravity != gravity) {
       _lastAppliedGravity = gravity;
