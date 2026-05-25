@@ -204,6 +204,7 @@ class _BetterPlayerVideoFitWidgetState extends State<_BetterPlayerVideoFitWidget
   bool _started = false;
 
   String? _lastAppliedGravity;
+  String? _pendingGravity;
 
   StreamSubscription<BetterPlayerControllerEvent>? _controllerEventSubscription;
 
@@ -270,24 +271,43 @@ class _BetterPlayerVideoFitWidgetState extends State<_BetterPlayerVideoFitWidget
   }
 
   /// Converts [BoxFit] to a native iOS AVLayerVideoGravity string and applies it.
-  void _applyBoxFitOnIOS(BoxFit boxFit) {
-    final String gravity;
+  String _gravityForBoxFit(BoxFit boxFit) {
     switch (boxFit) {
       case BoxFit.fill:
-        gravity = 'stretch';
+        return 'stretch';
       case BoxFit.cover:
-        gravity = 'fill';
+        return 'fill';
       case BoxFit.contain:
       case BoxFit.fitWidth:
       case BoxFit.fitHeight:
       case BoxFit.scaleDown:
       case BoxFit.none:
-        gravity = 'aspect';
+        return 'aspect';
     }
+  }
+
+  void _applyBoxFitOnIOS(BoxFit boxFit) {
+    final String gravity = _gravityForBoxFit(boxFit);
     if (_lastAppliedGravity != gravity) {
       _lastAppliedGravity = gravity;
       controller?.setAspectRatio(gravity);
     }
+  }
+
+  void _scheduleBoxFitApplyOnIOS(BoxFit boxFit) {
+    final String gravity = _gravityForBoxFit(boxFit);
+    if (_lastAppliedGravity == gravity || _pendingGravity == gravity) {
+      return;
+    }
+    _pendingGravity = gravity;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || !Platform.isIOS) {
+        _pendingGravity = null;
+        return;
+      }
+      _pendingGravity = null;
+      _applyBoxFitOnIOS(widget.boxFit);
+    });
   }
 
   @override
@@ -296,7 +316,7 @@ class _BetterPlayerVideoFitWidgetState extends State<_BetterPlayerVideoFitWidget
       // iOS platform views (UiKitView) don't play well with Clip/Transform/FittedBox.
       // Apply BoxFit as native video gravity on iOS instead.
       if (Platform.isIOS) {
-        _applyBoxFitOnIOS(widget.boxFit);
+        _scheduleBoxFitApplyOnIOS(widget.boxFit);
         return SizedBox.expand(child: VideoPlayer(controller));
       }
       return Center(
