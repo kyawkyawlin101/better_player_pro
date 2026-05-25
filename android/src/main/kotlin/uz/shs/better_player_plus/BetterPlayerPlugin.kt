@@ -246,6 +246,11 @@ class BetterPlayerPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
                 if (mixWitOthers != null) {
                     player.setMixWithOthers(mixWitOthers)
                 }
+                result.success(null)
+            }
+
+            SET_ASPECT_RATIO_METHOD -> {
+                result.success(null)
             }
 
             DISPOSE_METHOD -> {
@@ -582,6 +587,7 @@ class BetterPlayerPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
         private const val DISABLE_PICTURE_IN_PICTURE_METHOD = "disablePictureInPicture"
         private const val IS_PICTURE_IN_PICTURE_SUPPORTED_METHOD = "isPictureInPictureSupported"
         private const val SET_MIX_WITH_OTHERS_METHOD = "setMixWithOthers"
+        private const val SET_ASPECT_RATIO_METHOD = "setAspectRatio"
         private const val CLEAR_CACHE_METHOD = "clearCache"
         private const val DISPOSE_METHOD = "dispose"
         private const val PRE_CACHE_METHOD = "preCache"
