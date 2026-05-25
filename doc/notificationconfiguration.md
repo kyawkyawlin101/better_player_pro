@@ -42,6 +42,25 @@ be shown after play for the first time.
 
 To play resource after leaving the app, set `handleLifecycle` as false in your `BetterPlayerConfiguration`.
 
+### Background Playback (Android 16+)
+
+When `showNotification` is set to `true`, the plugin automatically starts a foreground service with
+`FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK`. This keeps the network connection alive during background
+playback and prevents Android 16's stricter Doze mode from killing the stream.
+
+The plugin's `AndroidManifest.xml` already declares the required permissions and service. However, 
+your app's `AndroidManifest.xml` must also include the following permissions:
+
+```xml
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+```
+
+The foreground service is automatically stopped when:
+- The player is disposed
+- All players are cleared
+- The plugin is detached from the engine
+
 Important note for android:
 You need to add special service in android native code. Service will simply destroy all remaining notifications. 
 This service need to be used to handle situation when app is killed without proper player destroying. 

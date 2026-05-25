@@ -211,6 +211,7 @@ internal class BetterPlayer(
         imageUrl: String?, notificationChannelName: String?,
         activityName: String
     ) {
+        BetterPlayerForegroundService.start(context, title, activityName)
         val mediaDescriptionAdapter: MediaDescriptionAdapter = object : MediaDescriptionAdapter {
             override fun getCurrentContentTitle(player: Player): String {
                 return title

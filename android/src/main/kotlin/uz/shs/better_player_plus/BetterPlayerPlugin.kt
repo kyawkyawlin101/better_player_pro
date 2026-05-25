@@ -96,6 +96,7 @@ class BetterPlayerPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
         }
         videoPlayers.clear()
         dataSources.clear()
+        stopForegroundService()
     }
 
     @UnstableApi
@@ -489,6 +490,9 @@ class BetterPlayerPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
         videoPlayers.remove(textureId)
         dataSources.remove(textureId)
         stopPipHandler()
+        if (videoPlayers.size == 0) {
+            stopForegroundService()
+        }
     }
 
     private fun stopPipHandler() {
@@ -497,6 +501,12 @@ class BetterPlayerPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
             pipHandler = null
         }
         pipRunnable = null
+    }
+
+    private fun stopForegroundService() {
+        flutterState?.applicationContext?.let { context ->
+            BetterPlayerForegroundService.stop(context)
+        }
     }
 
     private interface KeyForAssetFn {
