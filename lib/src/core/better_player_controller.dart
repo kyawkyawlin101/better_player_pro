@@ -849,6 +849,11 @@ class BetterPlayerController {
     if (videoPlayerController == null) {
       throw StateError('The data source has not been initialized');
     }
+    if ((track.width ?? 0) > 0 && (track.height ?? 0) > 0) {
+      videoPlayerController!.value = videoPlayerController!.value.copyWith(
+        size: Size(track.width!.toDouble(), track.height!.toDouble()),
+      );
+    }
     _postEvent(
       BetterPlayerEvent(
         BetterPlayerEventType.changedTrack,
@@ -866,6 +871,7 @@ class BetterPlayerController {
 
     videoPlayerController!.setTrackParameters(track.width, track.height, track.bitrate);
     _betterPlayerAsmsTrack = track;
+    _postControllerEvent(BetterPlayerControllerEvent.changedTrack);
   }
 
   ///Check if player can be played/paused automatically

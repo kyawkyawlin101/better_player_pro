@@ -17,4 +17,7 @@ enum BetterPlayerControllerEvent {
 
   ///Video set fit.
   setFit,
+
+  ///Video track has changed.
+  changedTrack,
 }

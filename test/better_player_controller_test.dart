@@ -1,6 +1,8 @@
 // ignore_for_file: unawaited_futures, cascade_invocations
 
 import 'package:better_player_plus/better_player_plus.dart';
+import 'package:better_player_plus/src/configuration/better_player_controller_event.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'better_player_mock_controller.dart';
 import 'better_player_test_utils.dart';
@@ -368,6 +370,28 @@ void main() {
       betterPlayerMockController.startNextVideoTimer();
       await Future.delayed(const Duration(milliseconds: 3000), () {});
       expect(eventCount, 3);
+    });
+
+    test('setTrack updates video size and sends changedTrack controller event', () async {
+      final BetterPlayerController betterPlayerController = BetterPlayerTestUtils.setupBetterPlayerMockController();
+      final MockVideoPlayerController videoPlayerController = BetterPlayerTestUtils.setupMockVideoPlayerControler();
+      betterPlayerController.videoPlayerController = videoPlayerController;
+      videoPlayerController.value = videoPlayerController.value.copyWith(
+        duration: const Duration(seconds: 100),
+        size: const Size(640, 360),
+      );
+
+      final controllerEvents = <BetterPlayerControllerEvent>[];
+      final subscription = betterPlayerController.controllerEventStream.listen(controllerEvents.add);
+
+      betterPlayerController.setTrack(
+        const BetterPlayerAsmsTrack('720p', 1280, 720, 1200000, 30, 'avc1.64001f', 'video/mp4'),
+      );
+
+      await Future<void>.delayed(const Duration(milliseconds: 100));
+      expect(videoPlayerController.value.size, const Size(1280, 720));
+      expect(controllerEvents, contains(BetterPlayerControllerEvent.changedTrack));
+      await subscription.cancel();
     });
   });
 }
