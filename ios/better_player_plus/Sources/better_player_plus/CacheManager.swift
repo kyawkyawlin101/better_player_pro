@@ -31,7 +31,7 @@ import PINCache
     var server: HLSCachingReverseProxyServer?
 
     lazy var storage: Cache.Storage<String,Data>? = {
-        return try? Cache.Storage<String,Data>(diskConfig: diskConfig, memoryConfig: memoryConfig, fileManager: .default, transformer: TransformerFactory.forCodable(ofType: Data.self))
+        return try? Cache.Storage<String,Data>(diskConfig: diskConfig, memoryConfig: memoryConfig, transformer: TransformerFactory.forCodable(ofType: Data.self))
     }()
     
 
