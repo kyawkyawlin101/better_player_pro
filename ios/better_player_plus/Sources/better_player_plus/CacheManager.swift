@@ -1,8 +1,5 @@
 import AVKit
 import Cache
-import HLSCachingReverseProxyServer
-import GCDWebServer
-import PINCache
 
 @objc public class CacheManager: NSObject {
 
@@ -28,21 +25,16 @@ import PINCache
       totalCostLimit: 0
     )
     
-    var server: HLSCachingReverseProxyServer?
-
     lazy var storage: Cache.Storage<String,Data>? = {
         return try? Cache.Storage<String,Data>(diskConfig: diskConfig, memoryConfig: memoryConfig, transformer: TransformerFactory.forCodable(ofType: Data.self))
     }()
     
 
     ///Setups cache server for HLS streams
+    @available(*, deprecated, message: "No setup is required for iOS HLS playback.")
     @objc public func setup(){
-        GCDWebServer.setLogLevel(4)
-        let webServer = GCDWebServer()
-        let cache = PINCache.shared
-        let urlSession = URLSession.shared
-        server = HLSCachingReverseProxyServer(webServer: webServer, urlSession: urlSession, cache: cache)
-        server?.start(port: 8080)
+        // Intentionally left blank. HLS playback is routed directly through AVURLAsset
+        // to keep compatibility with modern fMP4/CMAF playlists.
     }
     
     @objc public func setMaxCacheSize(_ maxCacheSize: NSNumber?){
@@ -90,8 +82,16 @@ import PINCache
     @objc public func getCachingPlayerItemForNormalPlayback(_ url: URL, cacheKey: String?, videoExtension: String?, headers: Dictionary<NSObject,AnyObject>) -> AVPlayerItem? {
         let mimeTypeResult = getMimeType(url:url, explicitVideoExtension: videoExtension)
         if (mimeTypeResult.1 == "application/vnd.apple.mpegurl"){
-            let reverseProxyURL = server?.reverseProxyURL(from: url)!
-            let playerItem = AVPlayerItem(url: reverseProxyURL!)
+            var httpHeaders = [String: String]()
+            headers.forEach { key, value in
+                let convertedKey: String? = key as? String
+                let convertedValue: String? = (value as? String)
+                    ?? (value as? NSNumber).map { $0.stringValue }
+                if let convertedKey = convertedKey, let convertedValue = convertedValue {
+                    httpHeaders[convertedKey] = convertedValue
+                }
+            }
+            let playerItem = AVPlayerItem(asset: AVURLAsset(url: url, options: [AVURLAssetHTTPHeaderFieldsKey: httpHeaders]))
             return playerItem
         } else {
             return getCachingPlayerItem(url, cacheKey: cacheKey, videoExtension: videoExtension, headers: headers)

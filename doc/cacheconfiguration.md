@@ -50,9 +50,9 @@ Stop running pre cache:
 betterPlayerController.stopPreCache(_betterPlayerDataSource);
 ```
 
-On Android both HLS and non-HLS data sources will work in the same way (by using ExoPlayer internal cache mechanism). On iOS
-for HLS stream [HLSCachingReverseProxyServer](https://github.com/StyleShare/HLSCachingReverseProxyServer) is being used,
-and for other sources [CachingPlayerItem](https://github.com/neekeetab/CachingPlayerItem) is being used.
+On Android both HLS and non-HLS data sources will work in the same way (by using ExoPlayer internal cache mechanism). On iOS,
+HLS streams are played directly by `AVURLAsset` (to preserve compatibility with modern HLS variants such as fMP4/CMAF), and
+for other sources [CachingPlayerItem](https://github.com/neekeetab/CachingPlayerItem) is being used.
 
 See table below to check which cache options are available on given platform:
 
@@ -61,4 +61,3 @@ See table below to check which cache options are available on given platform:
 | Normal item cache |      ✓      |        ✓        |    ✓    |      ✓      |
 |     Pre cache     |      ✓      |        ✓        |    x    |      ✓      |
 |     Stop cache    |      ✓      |        ✓        |    x    |      ✓      |
-
