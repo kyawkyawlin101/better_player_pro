@@ -9,6 +9,9 @@ class MockVideoPlayerController extends VideoPlayerController {
   bool isLoopingState = false;
   double volume = 0;
   double speed = 1;
+  int? trackWidth;
+  int? trackHeight;
+  int? trackBitrate;
 
   @override
   Future<void> play() async {
@@ -51,6 +54,13 @@ class MockVideoPlayerController extends VideoPlayerController {
   @override
   Future<void> setSpeed(double speed) async {
     this.speed = speed;
+  }
+
+  @override
+  Future<void> setTrackParameters(int? width, int? height, int? bitrate) async {
+    trackWidth = width;
+    trackHeight = height;
+    trackBitrate = bitrate;
   }
 
   @override
