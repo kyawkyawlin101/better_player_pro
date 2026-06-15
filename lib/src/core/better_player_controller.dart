@@ -851,12 +851,6 @@ class BetterPlayerController {
     }
 
     await videoPlayerController!.setTrackParameters(track.width, track.height, track.bitrate);
-
-    if ((track.width ?? 0) > 0 && (track.height ?? 0) > 0) {
-      videoPlayerController!.value = videoPlayerController!.value.copyWith(
-        size: Size(track.width!.toDouble(), track.height!.toDouble()),
-      );
-    }
     _betterPlayerAsmsTrack = track;
     _postEvent(
       BetterPlayerEvent(

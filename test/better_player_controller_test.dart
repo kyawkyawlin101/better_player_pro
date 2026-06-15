@@ -372,7 +372,7 @@ void main() {
       expect(eventCount, 3);
     });
 
-    test('setTrack updates video size and sends changedTrack controller event', () async {
+    test('setTrack keeps reported video size and sends changedTrack controller event', () async {
       final BetterPlayerController betterPlayerController = BetterPlayerTestUtils.setupBetterPlayerMockController();
       final MockVideoPlayerController videoPlayerController = BetterPlayerTestUtils.setupMockVideoPlayerControler();
       betterPlayerController.videoPlayerController = videoPlayerController;
@@ -388,7 +388,11 @@ void main() {
         const BetterPlayerAsmsTrack('720p', 1280, 720, 1200000, 30, 'avc1.64001f', 'video/mp4'),
       );
 
-      expect(videoPlayerController.value.size, const Size(1280, 720));
+      await Future<void>.delayed(Duration.zero);
+      expect(videoPlayerController.value.size, const Size(640, 360));
+      expect(videoPlayerController.trackWidth, 1280);
+      expect(videoPlayerController.trackHeight, 720);
+      expect(videoPlayerController.trackBitrate, 1200000);
       expect(controllerEvents, contains(BetterPlayerControllerEvent.changedTrack));
       await subscription.cancel();
     });
