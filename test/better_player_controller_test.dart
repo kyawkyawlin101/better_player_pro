@@ -388,7 +388,7 @@ void main() {
         const BetterPlayerAsmsTrack('720p', 1280, 720, 1200000, 30, 'avc1.64001f', 'video/mp4'),
       );
 
-      await Future<void>.delayed(const Duration(milliseconds: 100));
+      await Future<void>.delayed(Duration.zero);
       expect(videoPlayerController.value.size, const Size(640, 360));
       expect(videoPlayerController.trackWidth, 1280);
       expect(videoPlayerController.trackHeight, 720);
