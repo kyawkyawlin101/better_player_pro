@@ -61,7 +61,7 @@ Add the dependency in your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  better_player_plus: ^1.2.0
+  better_player_plus: ^1.3.2
 ```
 
 Import the package:

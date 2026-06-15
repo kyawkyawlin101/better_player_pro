@@ -1,3 +1,8 @@
+## 1.3.3
+
+* Fixed iOS podspec version mismatch (was stuck at `1.3.0`), now synced with `pubspec.yaml`
+* Fixed initial track setup not awaiting `setTrack`, which could race with data source setup
+
 ## 1.3.2
 
 * Fixed iOS HLS playback with `useCache: true` for modern fMP4/CMAF streams (`#EXT-X-MAP`, `.m4s`, external audio renditions) by playing HLS directly through `AVURLAsset` instead of the localhost reverse proxy
