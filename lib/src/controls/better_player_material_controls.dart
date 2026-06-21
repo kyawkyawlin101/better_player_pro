@@ -63,12 +63,25 @@ class _BetterPlayerMaterialControlsState extends BetterPlayerControlsState<Bette
     if (_latestValue?.hasError ?? false) {
       return ColoredBox(color: Colors.black, child: _buildErrorWidget());
     }
+
+    // Request focus when widget builds if not focused
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && !_focusNode.hasFocus) {
+        _focusNode.requestFocus();
+      }
+    });
+
     return Focus(
       focusNode: _focusNode,
       autofocus: true,
+      canRequestFocus: true,
+      skipTraversal: true,
+      descendantsAreFocusable: false,
+      descendantsAreTraversable: false,
       onKeyEvent: _handleKeyEvent,
       child: GestureDetector(
         onTap: () {
+          _focusNode.requestFocus();
           if (BetterPlayerMultipleGestureDetector.of(context) != null) {
             BetterPlayerMultipleGestureDetector.of(context)!.onTap?.call();
           }

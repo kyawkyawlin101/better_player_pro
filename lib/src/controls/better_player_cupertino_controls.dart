@@ -84,12 +84,25 @@ class _BetterPlayerCupertinoControlsState extends BetterPlayerControlsState<Bett
         _buildBottomBar(backgroundColor, iconColor, barHeight),
       ],
     );
+
+    // Request focus when widget builds if not focused
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && !_focusNode.hasFocus) {
+        _focusNode.requestFocus();
+      }
+    });
+
     return Focus(
       focusNode: _focusNode,
       autofocus: true,
+      canRequestFocus: true,
+      skipTraversal: true,
+      descendantsAreFocusable: false,
+      descendantsAreTraversable: false,
       onKeyEvent: _handleKeyEvent,
       child: GestureDetector(
         onTap: () {
+          _focusNode.requestFocus();
           if (BetterPlayerMultipleGestureDetector.of(context) != null) {
             BetterPlayerMultipleGestureDetector.of(context)!.onTap?.call();
           }
