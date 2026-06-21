@@ -153,6 +153,13 @@ class MethodChannelVideoPlayer extends VideoPlayerPlatform {
       return null;
     }
 
+    // DateTime.fromMillisecondsSinceEpoch valid range: -8640000000000000..8640000000000000
+    // Native code may return Long.MAX_VALUE or invalid values when position is unavailable
+    const int maxValidMilliseconds = 8640000000000000;
+    if (milliseconds > maxValidMilliseconds) {
+      return null;
+    }
+
     return DateTime.fromMillisecondsSinceEpoch(milliseconds);
   }
 
