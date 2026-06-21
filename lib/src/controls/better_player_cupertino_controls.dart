@@ -136,6 +136,35 @@ class _BetterPlayerCupertinoControlsState extends BetterPlayerControlsState<Bett
         cancelAndRestartTimer();
         return KeyEventResult.handled;
       }
+    } else {
+      // Controls visible - handle D-pad actions
+      if (key == LogicalKeyboardKey.select ||
+          key == LogicalKeyboardKey.enter ||
+          key == LogicalKeyboardKey.space ||
+          key == LogicalKeyboardKey.mediaPlayPause) {
+        _onPlayPause();
+        cancelAndRestartTimer();
+        return KeyEventResult.handled;
+      }
+
+      if (key == LogicalKeyboardKey.arrowLeft ||
+          key == LogicalKeyboardKey.mediaRewind) {
+        skipBack();
+        return KeyEventResult.handled;
+      }
+
+      if (key == LogicalKeyboardKey.arrowRight ||
+          key == LogicalKeyboardKey.mediaFastForward) {
+        skipForward();
+        return KeyEventResult.handled;
+      }
+
+      // Keep controls visible on any navigation
+      if (key == LogicalKeyboardKey.arrowUp ||
+          key == LogicalKeyboardKey.arrowDown) {
+        cancelAndRestartTimer();
+        return KeyEventResult.handled;
+      }
     }
 
     return KeyEventResult.ignored;
