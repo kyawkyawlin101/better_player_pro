@@ -108,22 +108,34 @@ class _BetterPlayerTvControlsState extends BetterPlayerControlsState<BetterPlaye
     return Focus(
       focusNode: _mainFocusNode,
       autofocus: true,
+      canRequestFocus: true,
+      skipTraversal: false,
       onKeyEvent: _handleKeyEvent,
+      onFocusChange: (hasFocus) {
+        if (!hasFocus && mounted) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted && !_mainFocusNode.hasFocus) {
+              _mainFocusNode.requestFocus();
+            }
+          });
+        }
+      },
       child: GestureDetector(
         onTap: () {
           controlsNotVisible ? cancelAndRestartTimer() : changePlayerControlsNotVisible(true);
         },
-        child: AbsorbPointer(
-          absorbing: controlsNotVisible,
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              if (_wasLoading) Center(child: _buildLoadingWidget()) else _buildHitArea(),
-              Positioned(top: 0, left: 0, right: 0, child: _buildTopBar()),
-              Positioned(bottom: 0, left: 0, right: 0, child: _buildBottomBar()),
-              _buildNextVideoWidget(),
-            ],
-          ),
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            // Invisible hit area that always captures focus for TV remote
+            const Positioned.fill(
+              child: ColoredBox(color: Colors.transparent),
+            ),
+            if (_wasLoading) Center(child: _buildLoadingWidget()) else _buildHitArea(),
+            Positioned(top: 0, left: 0, right: 0, child: _buildTopBar()),
+            Positioned(bottom: 0, left: 0, right: 0, child: _buildBottomBar()),
+            _buildNextVideoWidget(),
+          ],
         ),
       ),
     );
@@ -136,13 +148,36 @@ class _BetterPlayerTvControlsState extends BetterPlayerControlsState<BetterPlaye
 
     final key = event.logicalKey;
 
-    // Show controls on any key press if hidden
+    // Show controls on any D-pad/remote key press if hidden
     if (controlsNotVisible) {
-      cancelAndRestartTimer();
-      return KeyEventResult.handled;
+      // These keys should show controls
+      if (key == LogicalKeyboardKey.arrowUp ||
+          key == LogicalKeyboardKey.arrowDown ||
+          key == LogicalKeyboardKey.arrowLeft ||
+          key == LogicalKeyboardKey.arrowRight ||
+          key == LogicalKeyboardKey.select ||
+          key == LogicalKeyboardKey.enter ||
+          key == LogicalKeyboardKey.space ||
+          key == LogicalKeyboardKey.gameButtonA ||
+          key == LogicalKeyboardKey.mediaPlayPause) {
+        cancelAndRestartTimer();
+        return KeyEventResult.handled;
+      }
+      // Media keys should work even when controls are hidden
+      if (key == LogicalKeyboardKey.mediaRewind) {
+        skipBack();
+        cancelAndRestartTimer();
+        return KeyEventResult.handled;
+      }
+      if (key == LogicalKeyboardKey.mediaFastForward) {
+        skipForward();
+        cancelAndRestartTimer();
+        return KeyEventResult.handled;
+      }
+      return KeyEventResult.ignored;
     }
 
-    // Handle D-pad and remote control navigation
+    // Handle D-pad and remote control navigation when controls are visible
     if (key == LogicalKeyboardKey.select ||
         key == LogicalKeyboardKey.enter ||
         key == LogicalKeyboardKey.gameButtonA) {
