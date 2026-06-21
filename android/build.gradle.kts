@@ -51,6 +51,21 @@ android {
     sourceSets["main"].java.srcDirs("src/main/kotlin")
 }
 
+configurations.configureEach {
+    resolutionStrategy {
+        force(
+            "androidx.media3:media3-common:$media3Version",
+            "androidx.media3:media3-ui:$media3Version",
+            "androidx.media3:media3-session:$media3Version",
+            "androidx.media3:media3-exoplayer:$media3Version",
+            "androidx.media3:media3-exoplayer-hls:$media3Version",
+            "androidx.media3:media3-exoplayer-dash:$media3Version",
+            "androidx.media3:media3-datasource-cronet:$media3Version",
+            "androidx.media3:media3-exoplayer-smoothstreaming:$media3Version",
+        )
+    }
+}
+
 dependencies {
     implementation("androidx.media:media:1.7.1")
 

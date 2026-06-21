@@ -1,5 +1,6 @@
 ## 1.3.4
 
+* Fixed Android `ArrayIndexOutOfBoundsException` in `BaseTrackSelection.isTrackExcluded` by hardening audio/video track override validation and forcing Media3 `1.10.1` across all modules (includes upstream HLS fallback fix for #3161)
 * Fixed iOS build error: duplicate `BetterPlayerPlugin` interface definition caused by CocoaPods exposing ObjC header alongside Swift-generated header; excluded `BetterPlayerPlugin.h/m` from podspec source files
 * Fixed iOS Profile build configuration missing `Profile.xcconfig`, causing CocoaPods base config conflict
 * Fixed Android example `build.gradle.kts` missing `org.jetbrains.kotlin.android` plugin, causing unresolved `kotlin { compilerOptions }` block

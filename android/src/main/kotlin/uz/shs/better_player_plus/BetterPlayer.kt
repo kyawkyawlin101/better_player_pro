@@ -552,18 +552,24 @@ internal class BetterPlayer(
     }
 
     fun setTrackParameters(width: Int, height: Int, bitrate: Int) {
-        val parametersBuilder = trackSelector.buildUponParameters()
-        if (width != 0 && height != 0) {
-            parametersBuilder.setMaxVideoSize(width, height)
+        try {
+            val parametersBuilder = trackSelector.buildUponParameters()
+                .clearOverridesOfType(C.TRACK_TYPE_VIDEO)
+
+            if (width != 0 && height != 0) {
+                parametersBuilder.setMaxVideoSize(width, height)
+            }
+            if (bitrate != 0) {
+                parametersBuilder.setMaxVideoBitrate(bitrate)
+            }
+            if (width == 0 && height == 0 && bitrate == 0) {
+                parametersBuilder.clearVideoSizeConstraints()
+                parametersBuilder.setMaxVideoBitrate(Int.MAX_VALUE)
+            }
+            trackSelector.setParameters(parametersBuilder)
+        } catch (exception: Exception) {
+            Log.e(TAG, "setTrackParameters failed: $exception")
         }
-        if (bitrate != 0) {
-            parametersBuilder.setMaxVideoBitrate(bitrate)
-        }
-        if (width == 0 && height == 0 && bitrate == 0) {
-            parametersBuilder.clearVideoSizeConstraints()
-            parametersBuilder.setMaxVideoBitrate(Int.MAX_VALUE)
-        }
-        trackSelector.setParameters(parametersBuilder)
     }
 
     fun seekTo(location: Int) {
@@ -696,9 +702,10 @@ internal class BetterPlayer(
                             ///Fallback option
                             if (!hasStrangeAudioTrack && hasElementWithoutLabel && index == groupIndex) {
                                 // When labels are missing, default to the first track within the group
-                                val safeTrackIndex = if (group.length > 0) 0 else groupElementIndex
-                                setAudioTrack(rendererIndex, groupIndex, safeTrackIndex)
-                                return
+                                if (group.length > 0) {
+                                    setAudioTrack(rendererIndex, groupIndex, 0)
+                                    return
+                                }
                             }
                             ///Fallback option
                             if (hasStrangeAudioTrack && name == label) {
@@ -715,26 +722,33 @@ internal class BetterPlayer(
     }
 
     private fun setAudioTrack(rendererIndex: Int, groupIndex: Int, trackIndex: Int) {
-        val mappedTrackInfo = trackSelector.currentMappedTrackInfo
-        if (mappedTrackInfo != null) {
-            val trackGroups = mappedTrackInfo.getTrackGroups(rendererIndex)
-            if (groupIndex >= 0 && groupIndex < trackGroups.length) {
-                val group = trackGroups.get(groupIndex)
-                val safeTrackIndex = trackIndex.coerceIn(0, group.length - 1)
+        val mappedTrackInfo = trackSelector.currentMappedTrackInfo ?: return
+        if (rendererIndex < 0 || rendererIndex >= mappedTrackInfo.rendererCount) {
+            Log.e(TAG, "setAudioTrack: rendererIndex out of bounds: $rendererIndex")
+            return
+        }
 
-		val builder = trackSelector.parameters
-    			.buildUpon()
-    			.setTrackTypeDisabled(C.TRACK_TYPE_AUDIO, false)
-    			.clearOverridesOfType(C.TRACK_TYPE_AUDIO)
-    			.addOverride(
-        			TrackSelectionOverride(group, safeTrackIndex)
-    			)
+        val trackGroups = mappedTrackInfo.getTrackGroups(rendererIndex)
+        if (groupIndex < 0 || groupIndex >= trackGroups.length) {
+            Log.e(TAG, "setAudioTrack: groupIndex out of bounds: $groupIndex")
+            return
+        }
 
+        val group = trackGroups.get(groupIndex)
+        if (group.length == 0) {
+            Log.e(TAG, "setAudioTrack: track group is empty at index $groupIndex")
+            return
+        }
 
-                trackSelector.setParameters(builder)
-            } else {
-                Log.e(TAG, "setAudioTrack: groupIndex out of bounds: $groupIndex")
-            }
+        val safeTrackIndex = trackIndex.coerceIn(0, group.length - 1)
+        try {
+            val builder = trackSelector.buildUponParameters()
+                .setTrackTypeDisabled(C.TRACK_TYPE_AUDIO, false)
+                .clearOverridesOfType(C.TRACK_TYPE_AUDIO)
+                .addOverride(TrackSelectionOverride(group, safeTrackIndex))
+            trackSelector.setParameters(builder)
+        } catch (exception: Exception) {
+            Log.e(TAG, "setAudioTrack failed: $exception")
         }
     }
 
