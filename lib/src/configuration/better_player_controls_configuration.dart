@@ -58,6 +58,9 @@ class BetterPlayerControlsConfiguration {
     this.backgroundColor = Colors.black,
     this.overflowModalColor = Colors.white,
     this.overflowModalTextColor = Colors.black,
+    this.tvFocusColor = Colors.blue,
+    this.tvIconSizeMultiplier = 1.5,
+    this.tvShowButtonLabels = false,
   });
 
   factory BetterPlayerControlsConfiguration.white() => const BetterPlayerControlsConfiguration(
@@ -77,6 +80,23 @@ class BetterPlayerControlsConfiguration {
     pauseIcon: CupertinoIcons.pause_solid,
     skipBackIcon: CupertinoIcons.gobackward_15,
     skipForwardIcon: CupertinoIcons.goforward_15,
+  );
+
+  ///TV-optimized configuration for Android TV, Fire TV, Apple TV.
+  ///Provides larger icons and visible focus states for remote control navigation.
+  factory BetterPlayerControlsConfiguration.tv({
+    Color focusColor = Colors.blue,
+    Color iconsColor = Colors.white,
+    double iconSizeMultiplier = 1.5,
+    bool showButtonLabels = false,
+  }) => BetterPlayerControlsConfiguration(
+    playerTheme: BetterPlayerTheme.tv,
+    controlBarHeight: 72,
+    iconsColor: iconsColor,
+    tvFocusColor: focusColor,
+    tvIconSizeMultiplier: iconSizeMultiplier,
+    tvShowButtonLabels: showButtonLabels,
+    enablePip: false,
   );
 
   ///Setup BetterPlayerControlsConfiguration based on Theme options.
@@ -243,4 +263,13 @@ class BetterPlayerControlsConfiguration {
 
   ///Color of text in bottom modal sheet used for overflow menu items.
   final Color overflowModalTextColor;
+
+  ///TV-specific: Focus highlight color for D-pad navigation
+  final Color tvFocusColor;
+
+  ///TV-specific: Icon size multiplier for TV displays (default 1.5)
+  final double tvIconSizeMultiplier;
+
+  ///TV-specific: Whether to show button labels on TV
+  final bool tvShowButtonLabels;
 }

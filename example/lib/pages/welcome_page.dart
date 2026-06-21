@@ -28,6 +28,7 @@ import 'package:better_player_example/pages/resolutions_page.dart';
 import 'package:better_player_example/pages/reusable_video_list/reusable_video_list_page.dart';
 import 'package:better_player_example/pages/rotation_and_fit_page.dart';
 import 'package:better_player_example/pages/subtitles_page.dart';
+import 'package:better_player_example/pages/tv_player_page.dart';
 import 'package:better_player_example/pages/video_list/video_list_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -76,6 +77,9 @@ class _WelcomePageState extends State<WelcomePage> {
     }),
     _buildExampleElementWidget('Normal player', () {
       _navigateToPage(const NormalPlayerPage());
+    }),
+    _buildExampleElementWidget('TV player (D-pad navigation)', () {
+      _navigateToPage(const TvPlayerPage());
     }),
     _buildExampleElementWidget('Controls configuration', () {
       _navigateToPage(const ControlsConfigurationPage());

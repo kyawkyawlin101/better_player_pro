@@ -158,6 +158,8 @@ class _BetterPlayerWithControlsState extends State<BetterPlayerWithControls> {
           onControlsVisibilityChanged,
           controlsConfiguration,
         );
+      } else if (playerTheme == BetterPlayerTheme.tv) {
+        return _buildTvControl();
       } else if (playerTheme == BetterPlayerTheme.material) {
         return _buildMaterialControl();
       } else if (playerTheme == BetterPlayerTheme.cupertino) {
@@ -174,6 +176,11 @@ class _BetterPlayerWithControlsState extends State<BetterPlayerWithControls> {
   );
 
   Widget _buildCupertinoControl() => BetterPlayerCupertinoControls(
+    onControlsVisibilityChanged: onControlsVisibilityChanged,
+    controlsConfiguration: controlsConfiguration,
+  );
+
+  Widget _buildTvControl() => BetterPlayerTvControls(
     onControlsVisibilityChanged: onControlsVisibilityChanged,
     controlsConfiguration: controlsConfiguration,
   );
