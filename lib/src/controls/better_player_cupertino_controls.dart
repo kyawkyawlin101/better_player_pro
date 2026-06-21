@@ -9,6 +9,7 @@ import 'package:better_player_plus/src/core/better_player_utils.dart';
 import 'package:better_player_plus/src/video_player/video_player.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class BetterPlayerCupertinoControls extends StatefulWidget {
   const BetterPlayerCupertinoControls({
@@ -39,6 +40,7 @@ class _BetterPlayerCupertinoControlsState extends BetterPlayerControlsState<Bett
   VideoPlayerController? _controller;
   BetterPlayerController? _betterPlayerController;
   StreamSubscription<dynamic>? _controlsVisibilityStreamSubscription;
+  final FocusNode _focusNode = FocusNode();
 
   BetterPlayerControlsConfiguration get _controlsConfiguration => widget.controlsConfiguration;
 
@@ -82,35 +84,67 @@ class _BetterPlayerCupertinoControlsState extends BetterPlayerControlsState<Bett
         _buildBottomBar(backgroundColor, iconColor, barHeight),
       ],
     );
-    return GestureDetector(
-      onTap: () {
-        if (BetterPlayerMultipleGestureDetector.of(context) != null) {
-          BetterPlayerMultipleGestureDetector.of(context)!.onTap?.call();
-        }
-        controlsNotVisible ? cancelAndRestartTimer() : changePlayerControlsNotVisible(true);
-      },
-      onDoubleTap: () {
-        if (BetterPlayerMultipleGestureDetector.of(context) != null) {
-          BetterPlayerMultipleGestureDetector.of(context)!.onDoubleTap?.call();
-        }
-        cancelAndRestartTimer();
-        _onPlayPause();
-      },
-      onLongPress: () {
-        if (BetterPlayerMultipleGestureDetector.of(context) != null) {
-          BetterPlayerMultipleGestureDetector.of(context)!.onLongPress?.call();
-        }
-      },
-      child: AbsorbPointer(
-        absorbing: controlsNotVisible,
-        child: isFullScreen ? SafeArea(child: controlsColumn) : controlsColumn,
+    return Focus(
+      focusNode: _focusNode,
+      autofocus: true,
+      onKeyEvent: _handleKeyEvent,
+      child: GestureDetector(
+        onTap: () {
+          if (BetterPlayerMultipleGestureDetector.of(context) != null) {
+            BetterPlayerMultipleGestureDetector.of(context)!.onTap?.call();
+          }
+          controlsNotVisible ? cancelAndRestartTimer() : changePlayerControlsNotVisible(true);
+        },
+        onDoubleTap: () {
+          if (BetterPlayerMultipleGestureDetector.of(context) != null) {
+            BetterPlayerMultipleGestureDetector.of(context)!.onDoubleTap?.call();
+          }
+          cancelAndRestartTimer();
+          _onPlayPause();
+        },
+        onLongPress: () {
+          if (BetterPlayerMultipleGestureDetector.of(context) != null) {
+            BetterPlayerMultipleGestureDetector.of(context)!.onLongPress?.call();
+          }
+        },
+        child: AbsorbPointer(
+          absorbing: controlsNotVisible,
+          child: isFullScreen ? SafeArea(child: controlsColumn) : controlsColumn,
+        ),
       ),
     );
+  }
+
+  /// Handle D-pad/remote key events for TV support
+  KeyEventResult _handleKeyEvent(FocusNode node, KeyEvent event) {
+    if (event is! KeyDownEvent) {
+      return KeyEventResult.ignored;
+    }
+
+    final key = event.logicalKey;
+
+    // Show controls when D-pad/remote keys pressed while hidden
+    if (controlsNotVisible) {
+      if (key == LogicalKeyboardKey.arrowUp ||
+          key == LogicalKeyboardKey.arrowDown ||
+          key == LogicalKeyboardKey.arrowLeft ||
+          key == LogicalKeyboardKey.arrowRight ||
+          key == LogicalKeyboardKey.select ||
+          key == LogicalKeyboardKey.enter ||
+          key == LogicalKeyboardKey.space ||
+          key == LogicalKeyboardKey.mediaPlayPause) {
+        cancelAndRestartTimer();
+        return KeyEventResult.handled;
+      }
+    }
+
+    return KeyEventResult.ignored;
   }
 
   @override
   void dispose() {
     _dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
